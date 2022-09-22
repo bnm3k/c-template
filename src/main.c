@@ -1,13 +1,11 @@
+#include "../include/getline.h"
 #include "../include/str_helpers.h"
-#include "getline.h"
 
 #include <stdio.h>
 #define MAXLINE 1000
 
 int main() {
-    int x = 100, y = 10;
     char line[MAXLINE];
-    int found      = 0;
     char pattern[] = "ould";
 
     while (1) {
