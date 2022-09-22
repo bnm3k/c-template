@@ -17,7 +17,7 @@ run: build
 	cat tests/data/lines.txt | $(BIN)
 
 clean:
-	rm -rf $(BIN)
+	git clean -fxd
 
 format:
 	find ./src -type f \( -name '*.c' -o -name '*.h' \)  -exec clang-format -i {} +
