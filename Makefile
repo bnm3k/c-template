@@ -1,20 +1,32 @@
-.SILENT:
-.DEFAULT_GOAL:=build
+.DEFAULT_GOAL:=all
+SHELL=/bin/bash
 
 BUILD_DIR:=./build
-BIN:=$(BUILD_DIR)/a.out
+OBJS_DIR:=$(BUILD_DIR)/objs
+
+MAIN:=$(BUILD_DIR)/a.out
+
+SRCS:=$(wildcard src/*c)
+DEPS:=$(wildcard include/*.h)
+OBJS:=$(patsubst %.c,$(OBJS_DIR)/%.o,$(SRCS))
 
 CC=gcc
-CFLAGS=-I./include/
+LD=gcc
+CFLAGS=-I./include/ -O -Wextra -Wall -Wpedantic -Werror -g
+LDFLAGS=
+LIBS=
 
-$(BIN): src/main.c src/getline.c src/str_helpers.c
-	@echo "build $(BIN)"
-	$(CC) $(CFLAGS) $^ -o $(BIN)
+$(OBJS_DIR)/%.o: %.c $(DEPS)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-build: $(BIN)
+$(MAIN): $(OBJS)
+	$(LD) -o $@ $^ $(LIBS) $(LDFLAGS)
 
-run: build
-	cat tests/data/lines.txt | $(BIN)
+all: $(MAIN)
+
+run: $(MAIN)
+	cat tests/data/lines.txt | $(MAIN)
 
 clean:
 	git clean -fxd
